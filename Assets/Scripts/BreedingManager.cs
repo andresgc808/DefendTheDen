@@ -48,28 +48,28 @@ public class BreedingManager : MonoBehaviour {
         offspring.attackPower = (parent1.attackPower + parent2.attackPower) / 2 + Random.Range(-5, 5);
         offspring.health = (parent1.health + parent2.health) / 2 + Random.Range(-20, 20);
 
-        offspring.dominantAttackTrait = DetermineDominantTrait(parent1.dominantAttackTrait, parent2.dominantAttackTrait);
-        offspring.recessiveAttackTrait = DetermineRecessiveTrait(parent1.recessiveAttackTrait, parent2.recessiveAttackTrait);
+        //offspring.dominantAttackTrait = DetermineDominantTrait(parent1.dominantAttackTrait, parent2.dominantAttackTrait);
+        //offspring.recessiveAttackTrait = DetermineRecessiveTrait(parent1.recessiveAttackTrait, parent2.recessiveAttackTrait);
 
-        offspring.dominantHealthTrait = DetermineDominantTrait(parent1.dominantHealthTrait, parent2.dominantHealthTrait);
-        offspring.recessiveHealthTrait = DetermineRecessiveTrait(parent1.recessiveHealthTrait, parent2.recessiveHealthTrait);
+        //offspring.dominantHealthTrait = DetermineDominantTrait(parent1.dominantHealthTrait, parent2.dominantHealthTrait);
+        //offspring.recessiveHealthTrait = DetermineRecessiveTrait(parent1.recessiveHealthTrait, parent2.recessiveHealthTrait);
 
-        offspring.dominantFireRateTrait = DetermineDominantTrait(parent1.dominantFireRateTrait, parent2.dominantFireRateTrait);
-        offspring.recessiveFireRateTrait = DetermineRecessiveTrait(parent1.recessiveFireRateTrait, parent2.recessiveFireRateTrait);
+        //offspring.dominantFireRateTrait = DetermineDominantTrait(parent1.dominantFireRateTrait, parent2.dominantFireRateTrait);
+        //offspring.recessiveFireRateTrait = DetermineRecessiveTrait(parent1.recessiveFireRateTrait, parent2.recessiveFireRateTrait);
 
-        offspring.dominantRangeTrait = DetermineDominantTrait(parent1.dominantRangeTrait, parent2.dominantRangeTrait);
-        offspring.recessiveRangeTrait = DetermineRecessiveTrait(parent1.recessiveRangeTrait, parent2.recessiveRangeTrait);
+        //offspring.dominantRangeTrait = DetermineDominantTrait(parent1.dominantRangeTrait, parent2.dominantRangeTrait);
+        //offspring.recessiveRangeTrait = DetermineRecessiveTrait(parent1.recessiveRangeTrait, parent2.recessiveRangeTrait);
 
         return offspring;
     }
 
-    private Trait DetermineDominantTrait(Trait parent1Trait, Trait parent2Trait) {
-        // Logic to decide which dominant trait the offspring gets
-        return Random.value > 0.5f ? parent1Trait : parent2Trait;
-    }
+    //private Trait DetermineDominantTrait(Trait parent1Trait, Trait parent2Trait) {
+    //    // Logic to decide which dominant trait the offspring gets
+    //    return Random.value > 0.5f ? parent1Trait : parent2Trait;
+    //}
 
-    private Trait DetermineRecessiveTrait(Trait parent1Trait, Trait parent2Trait) {
-        // Similar logic for recessive traits
-        return Random.value > 0.5f ? parent1Trait : parent2Trait;
-    }
+    //private Trait DetermineRecessiveTrait(Trait parent1Trait, Trait parent2Trait) {
+    //    // Similar logic for recessive traits
+    //    return Random.value > 0.5f ? parent1Trait : parent2Trait;
+    //}
 }
