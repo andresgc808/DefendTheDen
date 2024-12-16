@@ -2,97 +2,121 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MousePosition3D : MonoBehaviour
-{
+public class MousePosition3D : MonoBehaviour {
     [SerializeField] private Camera _camera;
+
     private GameObject _selectedAnimal;
     private MoveableObject _currentMovement;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    private bool _selectionEnabled = true;
+
+    void Start() {
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        //if (Physics.Raycast(ray, out RaycastHit hit)) {
-        //    Debug.Log(hit.point);
-        //    transform.position = hit.point;
+    void Update() {
 
-        //}
+
+        if (_selectionEnabled == false)
+            return;
 
         if (Input.GetMouseButtonDown(0)) {
+            HandleRaycastSelection();
             Debug.Log("Mouse Clicked");
-            HandleMouseClick(ray);
-
         }
+
+
+        HandleObjectMovement();
+
     }
 
-    private void HandleMouseClick(Ray ray) {
-
+    private void HandleRaycastSelection() {
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        // See if the mouse position hits any object.
+
         if (Physics.Raycast(ray, out hit)) {
             GameObject clickedObject = hit.collider.gameObject;
 
+            AnimalObject animalObject = clickedObject.GetComponent<AnimalObject>();
 
-            //check if any Animal Tower, in that case. If selected it's now this target.
-
-            if (clickedObject.TryGetComponent(out AnimalTower animal)) {
-
-                // if its not this game object
+            if (animalObject != null) {
+                Debug.Log($"Hit object with AnimalObject: {clickedObject.name}");
                 if (_selectedAnimal != clickedObject) {
-
-                    //new object selected. If you click an animal it's now a new reference and not our previous selected
+                    
                     SelectNewAnimal(clickedObject);
 
                 } else {
 
-                    _currentMovement.StopMovement();
                     DeselectCurrentAnimal();
-                }
 
+
+                }
+            } else {
+                Debug.Log($"Hit object without AnimalObject: {clickedObject.name}");
+                DeselectCurrentAnimal();
 
             }
-        } //If there was a current animal target it now needs a move command, if theres movement components in that new target object move.
-                else if (_selectedAnimal != null && _currentMovement != null) {
-            _currentMovement.SetNewPos(hit.point);
         }
+
+
     }
 
-    // Set as selected the animal.
+
+    private void HandleObjectMovement() {
+
+
+        if (_selectedAnimal != null) {
+
+            if (Input.GetMouseButtonDown(1)) {
+
+                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100f)) {
+
+
+                    Debug.Log("Starting movement.");
+                    _currentMovement.StartMovement(hit.point);
+
+                }
+                Debug.Log("Right click registered in nothingness.");
+            }
+        }
+
+    }
+
 
     void SelectNewAnimal(GameObject animal) {
-        if (_selectedAnimal != null)
-            DeselectCurrentAnimal();
+
+        if (_selectedAnimal != null) {
+
+            _currentMovement.StopMovement();
+
+        }
+
 
         _selectedAnimal = animal;
 
-        if (_selectedAnimal.TryGetComponent(out MoveableObject movement)) {
 
-            _currentMovement = movement;
-
-        }
+        _currentMovement = animal.GetComponent<MoveableObject>();
 
 
-        Debug.Log("Selected" + _selectedAnimal.name);
 
     }
 
-
-    // sets to deselect the current target animal and its selected variables
     void DeselectCurrentAnimal() {
 
+
+        if (_selectedAnimal != null) {
+            _currentMovement.StopMovement();
+
+        }
 
         _selectedAnimal = null;
         _currentMovement = null;
 
-        Debug.Log("Deselected Animal");
-
 
     }
-
 }
