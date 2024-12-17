@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BreedingManager : MonoBehaviour {
+    [SerializeField] private Dictionary<(string, string), List<string>> _breedingPairs;
+
+    void Awake() { //start properties
+        _PopulateBreedingPairDatabase();
+    }
+    private void _PopulateBreedingPairDatabase() { 
+        _breedingPairs = new Dictionary<(string, string), List<string>> {
+            // keep dictionary symmetrical *might not be needed
+               { ("Turtle", "Squirrel"), new List<string> { "ArmoredSquirrel" } },
+               { ("Squirrel", "Turtle"), new List<string> { "ArmoredSquirrel" } },
+                };
+    }
+
     public AnimalTower BreedAnimals(AnimalTower parent1, AnimalTower parent2) {
         if (parent1 == parent2) {
             Debug.Log("Cannot breed same Animal!");
@@ -12,11 +25,25 @@ public class BreedingManager : MonoBehaviour {
         if (parent1.speciesName == parent2.speciesName) {
 
             if (parent1 == parent2) {
-                Debug.Log("Cannot breed same Animal!");
-                return null;
+                Debug.Log("Breeding the same animal type!");
+                // shortcutting since we know they are the same species, no need for lookup
+                var offspringType = parent1.speciesName;
+                return Resources.Load<AnimalTower>($"Animals/{offspringType}");
             }
 
+            List<string> possibleOffspring = new List<string>();
 
+            // check if the pair is in the dictionary
+            if (_breedingPairs.ContainsKey((parent1.speciesName, parent2.speciesName))) {
+                possibleOffspring = _breedingPairs[(parent1.speciesName, parent2.speciesName)];
+            } // no need to check inverse since dictionary is symmetrical
+
+            // TODO: add variability in offspring selection
+            string _offspringType = possibleOffspring[Random.Range(0, possibleOffspring.Count)]; // random selection
+
+            AnimalTower offspring = GenerateOffspring(_offspringType, parent1, parent2);
+
+            return offspring;
         }
 
         List<string> possibleOffspring = parent1.GetOffspringOptions(parent2);
