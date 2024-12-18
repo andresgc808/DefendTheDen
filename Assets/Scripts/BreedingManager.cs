@@ -16,7 +16,7 @@ public class BreedingManager : MonoBehaviour {
                 };
     }
 
-    public AnimalTower BreedAnimals(AnimalTower parent1, AnimalTower parent2) {
+    public GameObject BreedAnimals(AnimalTower parent1, AnimalTower parent2) {
         if (parent1 == parent2) {
             Debug.Log("Cannot breed same Animal!");
             return null;
@@ -24,13 +24,15 @@ public class BreedingManager : MonoBehaviour {
 
         if (parent1.speciesName == parent2.speciesName) {
 
-            if (parent1 == parent2) {
-                Debug.Log("Breeding the same animal type!");
-                // shortcutting since we know they are the same species, no need for lookup
-                var offspringType = parent1.speciesName;
-                return Resources.Load<AnimalTower>($"Animals/{offspringType}");
-            }
 
+            Debug.Log("Breeding the same animal type!");
+             // shortcutting since we know they are the same species, no need for lookup
+            var offspringType = parent1.speciesName;
+    
+            GameObject offspring = GenerateOffspring(offspringType, parent1, parent2);
+
+            return offspring;
+        } else {
             List<string> possibleOffspring = new List<string>();
 
             // check if the pair is in the dictionary
@@ -38,42 +40,58 @@ public class BreedingManager : MonoBehaviour {
                 possibleOffspring = _breedingPairs[(parent1.speciesName, parent2.speciesName)];
             } // no need to check inverse since dictionary is symmetrical
 
+            if (possibleOffspring == null || possibleOffspring.Count == 0) {
+                Debug.Log("These animals cannot breed.");
+                return null;
+            }
+
             // TODO: add variability in offspring selection
-            string _offspringType = possibleOffspring[Random.Range(0, possibleOffspring.Count)]; // random selection
+            string offspringType = possibleOffspring[Random.Range(0, possibleOffspring.Count)]; // random selection
 
-            AnimalTower offspring = GenerateOffspring(_offspringType, parent1, parent2);
-
+            GameObject offspring = GenerateOffspring(offspringType, parent1, parent2);
             return offspring;
         }
-
-        List<string> possibleOffspring = parent1.GetOffspringOptions(parent2);
-
-        if (possibleOffspring == null || possibleOffspring.Count == 0) {
-            Debug.Log("These animals cannot breed.");
-            return null;
-        }
-
-        string offspringType = possibleOffspring[Random.Range(0, possibleOffspring.Count)];
-        AnimalTower offspring = GenerateOffspring(offspringType, parent1, parent2);
-        return offspring;
     }
 
 
-    private AnimalTower GenerateOffspring(string offspringType, AnimalTower parent1, AnimalTower parent2) {
+    private GameObject GenerateOffspring(string offspringType, AnimalTower parent1, AnimalTower parent2) {
 
-        //Load our offspring from resources, we don't want to create a new asset here!
-        AnimalTower offspring = Resources.Load<AnimalTower>($"Animals/{offspringType}");
+        //Load our offspring data from resources, we don't want to create a new asset
+        AnimalTower offspringData = Resources.Load<AnimalTower>($"Animals/{offspringType}");
 
-        if (offspring == null) {
+        if (offspringData == null) {
             Debug.LogError($"Animal {offspringType} not found");
             return null;
         }
 
-        offspring = Instantiate(offspring);
+        //Load our prefab from resources
+        var prefab = Resources.Load<GameObject>($"Prefabs/{offspringType}");
+
+        if (prefab == null) {
+            Debug.LogError($"Prefab not found from {offspringType} ! Fix Resources/Prefabs folder path with same type as Resources/Animals folder.");
+            return null;
+        }
+
+        // Instantiate the prefab
+        var offspring = Instantiate(prefab);
+
+        AnimalObject obj = offspring.GetComponent<AnimalObject>();
+
+        if (obj == null) {
+            Debug.LogError($"Prefab {offspringType} does not have AnimalObject component!");
+            return null;
+        }
+
+        var clone = Instantiate(offspringData);
+
+        // Set the data of the new animal made from the prefab to its own custom scriptable object data
+        clone.attackPower = (parent1.attackPower + parent2.attackPower) / 2 + Random.Range(-5, 5);
+        clone.health = (parent1.health + parent2.health) / 2 + Random.Range(-20, 20);
+
+        obj.AnimalData = clone;
 
 
-        offspring.attackPower = (parent1.attackPower + parent2.attackPower) / 2 + Random.Range(-5, 5);
-        offspring.health = (parent1.health + parent2.health) / 2 + Random.Range(-20, 20);
+        
 
         //offspring.dominantAttackTrait = DetermineDominantTrait(parent1.dominantAttackTrait, parent2.dominantAttackTrait);
         //offspring.recessiveAttackTrait = DetermineRecessiveTrait(parent1.recessiveAttackTrait, parent2.recessiveAttackTrait);

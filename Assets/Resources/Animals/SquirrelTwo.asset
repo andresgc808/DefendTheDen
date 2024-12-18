@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd29f89e576f82d4cb747f41cb79bc71, type: 3}
-  m_Name: Squirrel
+  m_Name: SquirrelTwo
   m_EditorClassIdentifier: 
   speciesName: Squirrel
-  attackPower: 5
-  health: 5
-  fireRate: 5
-  range: 5
+  attackPower: 1
+  health: 1
+  fireRate: 1
+  range: 1

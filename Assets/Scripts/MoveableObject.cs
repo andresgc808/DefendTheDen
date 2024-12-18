@@ -6,18 +6,9 @@ public class MoveableObject : MonoBehaviour {
 
     public float movementSpeed = 5f;
 
-    [SerializeField] public bool isMoving;
+    [SerializeField] public bool isMoving = false;
     private Vector3 _moveTarget;
-    private bool useHorizontalGrid;
-
-
-    public void Awake() {
-        movementSpeed = 5;
-        isMoving = false;
-        useHorizontalGrid = true;
-
-    }
-
+    private bool useHorizontalGrid = true;
 
     public void StartMovement(Vector3 targetPosition) {
         if (isMoving == true) {
@@ -36,8 +27,12 @@ public class MoveableObject : MonoBehaviour {
     public void StopMovement() {
         isMoving = false;
 
-    }
+        var body = GetComponent<Rigidbody>();
 
+        if (body != null) {
+            body.velocity = Vector3.zero;
+        }
+    }
 
     private void FixedUpdate() {
 
