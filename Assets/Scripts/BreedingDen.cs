@@ -42,7 +42,6 @@ public class BreedingDen : MonoBehaviour
 
     void Start() {
 
-
         _breedingManager = GameObject.FindObjectOfType<BreedingManager>();
     }
 

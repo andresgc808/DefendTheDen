@@ -6,28 +6,32 @@ public class MousePosition3D : MonoBehaviour {
     [SerializeField] private Camera _camera;
 
     private GameObject _selectedAnimal;
+
     private MoveableObject _currentMovement;
 
     private bool _selectionEnabled = true;
 
-    void Start() {
+    private PauseMenu _pauseMenu;
 
+    void Start() {
+        // get pause menu instance
+        _pauseMenu = FindObjectOfType<PauseMenu>();
     }
 
     void Update() {
 
+        if (!PauseMenu.isPaused) { 
+            if (_selectionEnabled == false)
+                return;
 
-        if (_selectionEnabled == false)
-            return;
+            if (Input.GetMouseButtonDown(0)) {
+                HandleRaycastSelection();
+                Debug.Log("Mouse Clicked");
+            }
 
-        if (Input.GetMouseButtonDown(0)) {
-            HandleRaycastSelection();
-            Debug.Log("Mouse Clicked");
+
+            HandleObjectMovement();
         }
-
-
-        HandleObjectMovement();
-
     }
 
     private void HandleRaycastSelection() {
