@@ -9,6 +9,8 @@ public class AnimalTower : ScriptableObject {
     public float health;
     public float fireRate;
     public float range;
+    public AttackType attackType;
+    public GameObject projectilePrefab;
     //public Trait dominantAttackTrait;
     //public Trait recessiveAttackTrait;
     //public Trait dominantHealthTrait;
@@ -17,15 +19,4 @@ public class AnimalTower : ScriptableObject {
     //public Trait recessiveFireRateTrait;
     //public Trait dominantRangeTrait;
     //public Trait recessiveRangeTrait;
-
-    
-    public Dictionary<string, List<string>> compatibleBreeds = new Dictionary<string, List<string>>();
-
-
-    public List<string> GetOffspringOptions(AnimalTower partner) {
-        if (compatibleBreeds.ContainsKey(partner.speciesName)) {
-            return compatibleBreeds[partner.speciesName];
-        }
-        return null;
-    }
 }
