@@ -29,7 +29,6 @@ public class MousePosition3D : MonoBehaviour {
                 Debug.Log("Mouse Clicked");
             }
 
-
             HandleObjectMovement();
         }
     }
@@ -100,13 +99,10 @@ public class MousePosition3D : MonoBehaviour {
 
         }
 
-
         _selectedAnimal = animal;
 
 
         _currentMovement = animal.GetComponent<MoveableObject>();
-
-
 
     }
 
@@ -120,7 +116,6 @@ public class MousePosition3D : MonoBehaviour {
 
         _selectedAnimal = null;
         _currentMovement = null;
-
 
     }
 }
