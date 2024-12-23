@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class BreedingDen : MonoBehaviour
 {
@@ -40,9 +41,26 @@ public class BreedingDen : MonoBehaviour
 
     public event Action OnBreedingEnd;
 
+    private WaveManager _waveManager;
+
+    private int _waveCountdown = 15;
+
+    public TextMeshProUGUI waveStartTimerText;
+
+    private bool _timerEnabled = false;
+
     void Start() {
 
         _breedingManager = GameObject.FindObjectOfType<BreedingManager>();
+        _waveManager = FindObjectOfType<WaveManager>();
+
+        if (_waveManager != null) {
+            _waveManager.OnWaveStart += TimerOverrideEvent;
+        }
+
+        if (waveStartTimerText != null) {
+            waveStartTimerText.gameObject.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -166,6 +184,43 @@ public class BreedingDen : MonoBehaviour
         // Check if there are any subscribers to the OnBreedingEnd event
         // If there are, invoke the event to notify all subscribers that the breeding process has ended
         OnBreedingEnd?.Invoke();  // triggers new callbacks events
+
+        if (_breedingCount >= maxBreedingAttempts && !_timerEnabled) {
+            // start wave countdown after all breeding has been done
+            _timerEnabled = true;
+            StartCoroutine(StartWaveTimer());
+            waveStartTimerText?.gameObject.SetActive(true); // shows counter after max breeding has been reached
+        }
+    }
+
+    private IEnumerator StartWaveTimer() {
+        while (_waveCountdown > 0) {
+            UpdateTimerUI();
+            yield return new WaitForSecondsRealtime(1f);
+
+            _waveCountdown--;
+        }
+        _timerEnabled = false;
+        TimerFinished();
+    }
+
+    private void TimerFinished() {
+        _waveManager.StartWave();
+        _waveCountdown = 15;
+        _timerEnabled = false;
+        waveStartTimerText?.gameObject.SetActive(false);
+        UpdateTimerUI();
+
+    }
+
+    private void UpdateTimerUI() {
+        if (waveStartTimerText == null) return;
+        waveStartTimerText.text = $"Wave incoming: {_waveCountdown}";
+    }
+
+    private void TimerOverrideEvent() {
+        _waveCountdown = 0;
+        TimerFinished();
     }
 
     public void ResetBreedSystem() //method that provides object behaviours reset cleanup parameters before method operation or any other actions happens
