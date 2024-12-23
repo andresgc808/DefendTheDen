@@ -84,14 +84,13 @@ public class WaveManager : MonoBehaviour
     }
 
     private IEnumerator SpawnWave(Wave wave) {
-        // Do nothing for now for testing 
 
         foreach (EnemySpawnType spawnType in wave.enemySpawns) {
-        //    for (int i = 0; i < spawnType.amountOfEnemies; i++) {
-        //        GameObject enemy = Instantiate(spawnType.enemyPrefab, spawnType.spawnPosition.position, Quaternion.identity);
-        //        _currentEnemies.Add(enemy);
+            for (int i = 0; i < spawnType.amountOfEnemies; i++) {
+                GameObject enemy = Instantiate(spawnType.enemyPrefab, spawnType.spawnPosition.position, Quaternion.identity);
+                _currentEnemies.Add(enemy);
                 yield return new WaitForSeconds(spawnType.spawnInterval);
-            //    }
+            }
         }
         isWaveActive = false;
         yield break;
