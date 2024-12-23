@@ -9,6 +9,8 @@ public class AnimalObject : MonoBehaviour
     private Collider _collider;
     private Rigidbody _rigidbody;
     private MoveableObject _moveableObject;
+    private AnimalCombat combat;
+    private AnimalHealth health;
 
     private void Awake() {
         // Cache components that are critical for deactivation
@@ -19,8 +21,8 @@ public class AnimalObject : MonoBehaviour
     }
 
     public void Start() {
-        AnimalHealth health = GetComponent<AnimalHealth>();
-        AnimalCombat combat = GetComponent<AnimalCombat>();
+        health = GetComponent<AnimalHealth>();
+        combat = GetComponent<AnimalCombat>();
 
         if (health != null) {
             health.Health = AnimalData.health;
@@ -65,6 +67,10 @@ public class AnimalObject : MonoBehaviour
         // Disable movement script
         if (_moveableObject) _moveableObject.enabled = false;
 
+        // Disable combat and health scripts
+        if (combat) combat.enabled = false;
+        if (health) health.enabled = false;
+
         Debug.Log($"{gameObject.name} deactivated.");
     }
 
@@ -82,6 +88,10 @@ public class AnimalObject : MonoBehaviour
 
         // Re-enable movement script
         if (_moveableObject) _moveableObject.enabled = true;
+
+        // Re-enable combat and health scripts
+        if (combat) combat.enabled = true;
+        if (health) health.enabled = true;
 
         Debug.Log($"{gameObject.name} reactivated.");
     }

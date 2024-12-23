@@ -58,7 +58,9 @@ public class WaveManager : MonoBehaviour
     private void UpdateUI() {
         if (timerText == null) return;
 
+        // show /hide UI elements based on whether a wave is active
         timerText.gameObject.SetActive(!isWaveActive);
+        slider.gameObject.SetActive(!isWaveActive);
 
         float sliderPercentage = _holdTimer / holdDuration;
 
@@ -76,19 +78,20 @@ public class WaveManager : MonoBehaviour
         }
         _currentWaveIndex = (_currentWaveIndex + 1) % waves.Count;
         isWaveActive = true;
-        Debug.Log($"Wave Start triggered {_currentWaveIndex}!");
+        Debug.Log($"Wave Start triggered. Current Wave: {_currentWaveIndex}!");
         StartCoroutine(SpawnWave(waves[_currentWaveIndex]));
         OnWaveStart?.Invoke();
     }
 
     private IEnumerator SpawnWave(Wave wave) {
-        isWaveActive = true;
+        // Do nothing for now for testing 
+
         foreach (EnemySpawnType spawnType in wave.enemySpawns) {
-            for (int i = 0; i < spawnType.amountOfEnemies; i++) {
-                GameObject enemy = Instantiate(spawnType.enemyPrefab, spawnType.spawnPosition.position, Quaternion.identity);
-                _currentEnemies.Add(enemy);
+        //    for (int i = 0; i < spawnType.amountOfEnemies; i++) {
+        //        GameObject enemy = Instantiate(spawnType.enemyPrefab, spawnType.spawnPosition.position, Quaternion.identity);
+        //        _currentEnemies.Add(enemy);
                 yield return new WaitForSeconds(spawnType.spawnInterval);
-            }
+            //    }
         }
         isWaveActive = false;
         yield break;

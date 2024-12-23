@@ -93,7 +93,7 @@ public class MousePosition3D : MonoBehaviour {
 
     void SelectNewAnimal(GameObject animal) {
 
-        if (_selectedAnimal != null) {
+        if (_selectedAnimal != null && _currentMovement.enabled) {
 
             _currentMovement.StopMovement();
 
@@ -108,8 +108,8 @@ public class MousePosition3D : MonoBehaviour {
 
     void DeselectCurrentAnimal() {
 
-
-        if (_selectedAnimal != null) {
+        // check if movement script is enabled
+        if (_selectedAnimal != null && _currentMovement.enabled) {
             _currentMovement.StopMovement();
 
         }

@@ -55,7 +55,7 @@ public class BreedingDen : MonoBehaviour
         _waveManager = FindObjectOfType<WaveManager>();
 
         if (_waveManager != null) {
-            _waveManager.OnWaveStart += TimerOverrideEvent;
+            _waveManager.OnWaveStart += TimerFinished;
         }
 
         if (waveStartTimerText != null) {
@@ -65,7 +65,8 @@ public class BreedingDen : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         
-        
+        if (_waveManager.isWaveActive) return; // break instantly to prevent breeding during wave
+
         Debug.Log("Object with name: " + other.gameObject.name +" entered. isBreeding = " + _isBreeding + ". On Cooldown = "+ _isOnCooldown + ". Breeding attempt: " + _breedingCount);
 
         if (_isBreeding || _isOnCooldown || _breedingCount >= maxBreedingAttempts) return;
@@ -205,22 +206,20 @@ public class BreedingDen : MonoBehaviour
     }
 
     private void TimerFinished() {
-        _waveManager.StartWave();
+        if (!_waveManager.isWaveActive) {
+            _waveManager.StartWave();
+        }
+
+        _breedingCount = 0;
         _waveCountdown = 15;
         _timerEnabled = false;
         waveStartTimerText?.gameObject.SetActive(false);
         UpdateTimerUI();
-
     }
 
     private void UpdateTimerUI() {
         if (waveStartTimerText == null) return;
         waveStartTimerText.text = $"Wave incoming: {_waveCountdown}";
-    }
-
-    private void TimerOverrideEvent() {
-        _waveCountdown = 0;
-        TimerFinished();
     }
 
     public void ResetBreedSystem() //method that provides object behaviours reset cleanup parameters before method operation or any other actions happens
