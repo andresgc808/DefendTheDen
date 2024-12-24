@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8339828976410117289}
   - component: {fileID: 4040402377945713678}
   m_Layer: 0
-  m_Name: SquirrelProjectile
+  m_Name: RhinoProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c0034158e8eddc14e867cb1761465fe4, type: 2}
+  - {fileID: 2100000, guid: d38d9f75f1a43cd42ab80bbbefef04a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05d77020bcd709542b2fe8a8983b216c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 6
   collisionRadius: 0.5
   whatIsEnemy:
     serializedVersion: 2
