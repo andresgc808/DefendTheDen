@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 7597671638299909366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.276, y: 0.97, z: 0.203}
+  m_LocalPosition: {x: -5.276, y: 0.8, z: 0.203}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -55,6 +55,10 @@ MonoBehaviour:
   _rotationSpeed: 15
   _forwardDirectionObject: {fileID: 0}
   _animator: {fileID: 7663186927250696021}
+  _groundCheckDistance: 0.5
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!54 &2979606619955433068
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -80,7 +84,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 48
+  m_Constraints: 80
   m_CollisionDetection: 1
 --- !u!65 &2005475300397200394
 BoxCollider:
