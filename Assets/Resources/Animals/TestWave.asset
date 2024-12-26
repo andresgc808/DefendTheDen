@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c6a808d923290e4b93a8b39fb97e835, type: 3}
-  m_Name: NewWave
+  m_Name: TestWave
   m_EditorClassIdentifier: 
   enemySpawns:
-  - enemyPrefab: {fileID: 0}
-    spawnInterval: 0
-    spawnPosition: {fileID: 0}
-    amountOfEnemies: 0
-  - enemyPrefab: {fileID: 0}
-    spawnInterval: 0
-    spawnPosition: {fileID: 0}
-    amountOfEnemies: 0
+  - enemyPrefab: {fileID: 4136435910037313804, guid: e473bdb5591d2f544b5ea16314c1c265,
+      type: 3}
+    spawnInterval: 3
+    spawnPosition: {fileID: 7332170328083808034, guid: e473bdb5591d2f544b5ea16314c1c265,
+      type: 3}
+    amountOfEnemies: 3

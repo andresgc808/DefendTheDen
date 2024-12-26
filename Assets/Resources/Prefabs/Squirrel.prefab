@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -7534299294093813385}
   - component: {fileID: 7651623587941230952}
   - component: {fileID: 4063213135739084786}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Squirrel
   m_TagString: AnimalTower
   m_Icon: {fileID: 0}
@@ -102,15 +102,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8209a0a8fa4c4949a5199987f126b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  isMoving: 0
+  _rb: {fileID: 0}
+  _moveSpeed: 5
   _rotationSpeed: 15
-  _forwardDirectionObject: {fileID: 0}
-  _animator: {fileID: 0}
-  _groundCheckDistance: 0.5
-  _groundLayer:
+  _groundCheck: {fileID: 0}
+  _groundDistance: 0.4
+  _groundMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
+  _gravity: -9.81
+  _animator: {fileID: 0}
+  _movementTolerance: 0.2
+  _isMoving: 0
 --- !u!114 &4076160863682246079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +215,7 @@ GameObject:
   - component: {fileID: 375620726858655076}
   - component: {fileID: 8873053108559888841}
   - component: {fileID: 5056329464071076223}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

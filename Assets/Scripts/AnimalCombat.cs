@@ -55,14 +55,14 @@ public class AnimalCombat : MonoBehaviour, IAttacker
         Collider[] colliders = Physics.OverlapSphere(this.transform.position, AttackRange, whatIsEnemy);
 
         // log info 
-        Debug.Log("Attack range: " + AttackRange);
+        //Debug.Log("Attack range: " + AttackRange);
 
         float minDistance = float.MaxValue;
         IDamageable closestTarget = null;
 
         foreach (var hitCollider in colliders) {
             IDamageable damageable = hitCollider.GetComponent<IDamageable>();
-            Debug.Log("Damageable: " + damageable);
+            //Debug.Log("Damageable: " + damageable);
 
             if (damageable != null && damageable.IsAlive && !damageable.Equals(this.GetComponent<IDamageable>())) {
                 float distance = Vector3.Distance(this.transform.position, hitCollider.transform.position);
