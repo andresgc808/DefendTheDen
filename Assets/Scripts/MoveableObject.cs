@@ -58,6 +58,7 @@ public class MoveableObject : MonoBehaviour {
         _isMoving = true;
 
         if (_animator != null) {
+            Debug.Log("MovingFromStart");
             _animator.SetBool("isMoving", true);
         }
     }
@@ -66,6 +67,7 @@ public class MoveableObject : MonoBehaviour {
         _isMoving = false;
 
         if (_animator != null) {
+            Debug.Log("StopingMovement");
             _animator.SetBool("isMoving", false);
         }
 
@@ -105,6 +107,11 @@ public class MoveableObject : MonoBehaviour {
         if (distance < 0.1f) {
             StopMovement();
             return;
+        }
+
+        if (_animator != null) {
+            Debug.Log("Moving");
+            _animator.SetBool("isMoving", true);
         }
 
         //Vector3 skewedDirection = matrix.MultiplyPoint3x4(direction);
