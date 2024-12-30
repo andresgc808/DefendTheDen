@@ -58,7 +58,6 @@ public class MoveableObject : MonoBehaviour {
         _isMoving = true;
 
         if (_animator != null) {
-            Debug.Log("MovingFromStart");
             _animator.SetBool("isMoving", true);
         }
     }
@@ -67,7 +66,6 @@ public class MoveableObject : MonoBehaviour {
         _isMoving = false;
 
         if (_animator != null) {
-            Debug.Log("StopingMovement");
             _animator.SetBool("isMoving", false);
         }
 
@@ -110,7 +108,6 @@ public class MoveableObject : MonoBehaviour {
         }
 
         if (_animator != null) {
-            Debug.Log("Moving");
             _animator.SetBool("isMoving", true);
         }
 

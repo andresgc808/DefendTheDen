@@ -28,8 +28,6 @@ public class EnemyStateMachine : MonoBehaviour {
         _stateMachine = new StateMachine();
 
         if (EnemyData != null) {
-            Debug.Log("Enemy Data is not null");
-            Debug.Log("Enemy Data is: " + EnemyData);
             SetEnemyData(EnemyData);
         }   
     }
@@ -58,28 +56,28 @@ public class EnemyStateMachine : MonoBehaviour {
             Debug.Log($"{gameObject.name}: Switched to IDLE state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", false);
-                _animator.SetBool("isAttacking", false);
+                //_animator.SetBool("isAttacking", false);
             }
         }
         if (_stateMachine.CurrentState == _stateMachine.states[1]) {  // moving
             Debug.Log($"{gameObject.name}: Switched to MOVING state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", true);
-                _animator.SetBool("isAttacking", false);
+                //_animator.SetBool("isAttacking", false);
             }
         }
         if (_stateMachine.CurrentState == _stateMachine.states[2]) { //attacking
             Debug.Log($"{gameObject.name}: Switched to ATTACKING state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", false);
-                _animator.SetBool("isAttacking", true);
+                //_animator.SetBool("isAttacking", true);
             }
         }
         if (_stateMachine.CurrentState == _stateMachine.states[3]) { // dead
             Debug.Log($"{gameObject.name}: Switched to DEAD state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", false);
-                _animator.SetBool("isAttacking", false);
+                //_animator.SetBool("isAttacking", false);
             }
         }
 

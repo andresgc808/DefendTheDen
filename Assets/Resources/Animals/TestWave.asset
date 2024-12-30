@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestWave
   m_EditorClassIdentifier: 
   enemySpawns:
-  - enemyPrefab: {fileID: 4136435910037313804, guid: e473bdb5591d2f544b5ea16314c1c265,
+  - enemyPrefab: {fileID: 5565899459631558538, guid: e8ec565c25d965543873126bd63fb125,
       type: 3}
     spawnInterval: 3
     spawnPosition: {fileID: 7332170328083808034, guid: e473bdb5591d2f544b5ea16314c1c265,
