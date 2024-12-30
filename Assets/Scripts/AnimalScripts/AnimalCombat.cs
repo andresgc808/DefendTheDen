@@ -28,7 +28,6 @@ public class AnimalCombat : MonoBehaviour, IAttacker
             }
             return;
         }
-        //Debug.Log($"Current Attack: {_currentAttack}");
         if (_currentAttack == null) return;
 
         _timeSinceLastAttack += Time.deltaTime;
@@ -37,10 +36,12 @@ public class AnimalCombat : MonoBehaviour, IAttacker
             IDamageable target = SelectTarget(); // add later
 
             if (target != null) {
+                // log self and target
+                Debug.Log($"{this.gameObject.name} is attacking {target}");
                 Attack(target);
                 _timeSinceLastAttack = 0;
             } else {
-                Debug.Log("No target found.");
+
                 _timeSinceLastAttack = 0; // to prevent infinte logs, remove later
             }
         }
@@ -54,24 +55,14 @@ public class AnimalCombat : MonoBehaviour, IAttacker
     IDamageable SelectTarget() {
         Collider[] colliders = Physics.OverlapSphere(this.transform.position, AttackRange, whatIsEnemy);
 
-        // log info 
-        //Debug.Log("Attack range: " + AttackRange);
-
         float minDistance = float.MaxValue;
         IDamageable closestTarget = null;
 
         foreach (var hitCollider in colliders) {
             IDamageable damageable = hitCollider.GetComponent<IDamageable>();
-            //Debug.Log("Damageable: " + damageable);
 
             if (damageable != null && damageable.IsAlive && !damageable.Equals(this.GetComponent<IDamageable>())) {
                 float distance = Vector3.Distance(this.transform.position, hitCollider.transform.position);
-
-                // log info
-                Debug.Log(distance);
-                // log if damageable is self
-                Debug.Log("Is self: " + damageable.Equals(this.GetComponent<IDamageable>()));
-
 
                 if (distance < minDistance) {
                     minDistance = distance;

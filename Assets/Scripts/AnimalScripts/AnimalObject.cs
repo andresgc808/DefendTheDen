@@ -65,6 +65,7 @@ public class AnimalObject : MonoBehaviour
         }
     }
 
+    // Deprecated
     public void Deactivate() {
         // Disable rendering
         foreach (var renderer in _renderers) {
@@ -94,6 +95,7 @@ public class AnimalObject : MonoBehaviour
         Debug.Log($"{gameObject.name} deactivated.");
     }
 
+    // Deprecated
     public void Activate() {
         // Enable rendering
         foreach (var renderer in _renderers) {

@@ -74,7 +74,8 @@ public class BreedingDen : MonoBehaviour
         if (_animalsInDen.Contains(animalObject)) return;
         if (_isBreeding) return;
 
-        animalObject.Deactivate();
+        UnitSelectionManager.Instance.DeselectObject(animalObject.gameObject);
+        animalObject.gameObject.SetActive(false);
 
         _animalsInDen.Add(animalObject);
 
@@ -153,7 +154,7 @@ public class BreedingDen : MonoBehaviour
 
         for (int i = 0; i < _animalsInDen.Count; i++) {
             AnimalObject animalObject = _animalsInDen[i]; // activate again
-            animalObject.Activate();
+            animalObject.gameObject.SetActive(true);
 
         }
 
