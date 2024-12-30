@@ -12,12 +12,19 @@ public class AnimalObject : MonoBehaviour
     private AnimalCombat combat;
     private AnimalHealth health;
 
+    private UnityEngine.AI.NavMeshAgent _navMeshAgent;
+    private UnitMovement _unitMovement;
+
     private void Awake() {
         // Cache components that are critical for deactivation
         _renderers = GetComponentsInChildren<Renderer>(true);
         _collider = GetComponent<Collider>();
         _rigidbody = GetComponent<Rigidbody>();
         _moveableObject = GetComponent<MoveableObject>();
+
+        // for navmesh agent
+        _navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        _unitMovement = GetComponent<UnitMovement>();
     }
 
     public void Start() {
@@ -47,6 +54,14 @@ public class AnimalObject : MonoBehaviour
             }
             //if (attackComponent != null)
             //    attackComponent.Range = AnimalData.range;
+
+            if(_moveableObject != null){
+                if (_navMeshAgent != null) _navMeshAgent.enabled = false;
+                if (_unitMovement != null) _unitMovement.enabled = false;
+            }else {
+                if (_navMeshAgent != null) _navMeshAgent.enabled = true;
+                if (_unitMovement != null) _unitMovement.enabled = true;
+            }
         }
     }
 
@@ -66,6 +81,8 @@ public class AnimalObject : MonoBehaviour
 
         // Disable movement script
         if (_moveableObject) _moveableObject.enabled = false;
+        if (_unitMovement != null) _unitMovement.enabled = false;
+        if (_navMeshAgent != null) _navMeshAgent.enabled = false;
 
         // Disable combat and health scripts
         if (combat) combat.enabled = false;
@@ -88,6 +105,8 @@ public class AnimalObject : MonoBehaviour
 
         // Re-enable movement script
         if (_moveableObject) _moveableObject.enabled = true;
+        if (_unitMovement != null) _unitMovement.enabled = true;
+        if (_navMeshAgent != null) _navMeshAgent.enabled = true;
 
         // Re-enable combat and health scripts
         if (combat) combat.enabled = true;
