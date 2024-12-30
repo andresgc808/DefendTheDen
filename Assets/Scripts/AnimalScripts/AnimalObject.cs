@@ -60,7 +60,7 @@ public class AnimalObject : MonoBehaviour
                 if (_unitMovement != null) _unitMovement.enabled = false;
             }else {
                 if (_navMeshAgent != null) _navMeshAgent.enabled = true;
-                if (_unitMovement != null) _unitMovement.enabled = true;
+                //if (_unitMovement != null) _unitMovement.enabled = true;
             }
         }
     }
@@ -84,6 +84,9 @@ public class AnimalObject : MonoBehaviour
         if (_unitMovement != null) _unitMovement.enabled = false;
         if (_navMeshAgent != null) _navMeshAgent.enabled = false;
 
+        // deselect animal
+        UnitSelectionManager.Instance.DeselectObject(gameObject);
+
         // Disable combat and health scripts
         if (combat) combat.enabled = false;
         if (health) health.enabled = false;
@@ -105,7 +108,7 @@ public class AnimalObject : MonoBehaviour
 
         // Re-enable movement script
         if (_moveableObject) _moveableObject.enabled = true;
-        if (_unitMovement != null) _unitMovement.enabled = true;
+        //if (_unitMovement != null) _unitMovement.enabled = true;
         if (_navMeshAgent != null) _navMeshAgent.enabled = true;
 
         // Re-enable combat and health scripts

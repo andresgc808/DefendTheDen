@@ -63,6 +63,12 @@ public class UnitSelectionManager : MonoBehaviour {
 
     }
 
+    public void DeselectObject(GameObject obj) {
+        selectedUnitsList.Remove(obj);
+        TriggerSelectionIndicator(obj, false);
+        EnableUnitMovement(obj, false);
+    }
+
     private void DeselectAll() {
         foreach (GameObject obj in selectedUnitsList) {
             EnableUnitMovement(obj, false);
