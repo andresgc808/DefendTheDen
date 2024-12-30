@@ -41,7 +41,7 @@ public class UnitSelectionManager : MonoBehaviour {
             }
         } 
 
-        if (Input.GetMouseButtonDown(1)) {
+        if (Input.GetMouseButtonDown(1) && selectedUnitsList.Count > 0) {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -68,6 +68,8 @@ public class UnitSelectionManager : MonoBehaviour {
             EnableUnitMovement(obj, false);
             TriggerSelectionIndicator(obj, false);
         }
+
+        groundMarker.SetActive(false);
         selectedUnitsList.Clear();
     }
 
