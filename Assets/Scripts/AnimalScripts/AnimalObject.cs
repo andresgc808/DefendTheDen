@@ -91,8 +91,6 @@ public class AnimalObject : MonoBehaviour
         // Disable combat and health scripts
         if (combat) combat.enabled = false;
         if (health) health.enabled = false;
-
-        Debug.Log($"{gameObject.name} deactivated.");
     }
 
     // Deprecated
@@ -116,8 +114,6 @@ public class AnimalObject : MonoBehaviour
         // Re-enable combat and health scripts
         if (combat) combat.enabled = true;
         if (health) health.enabled = true;
-
-        Debug.Log($"{gameObject.name} reactivated.");
     }
 
 }

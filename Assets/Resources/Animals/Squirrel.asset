@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speciesName: Squirrel
   attackPower: 5
-  health: 35
-  fireRate: 5
+  health: 14
+  fireRate: 8
   range: 13
   attackType: 0
   projectilePrefab: {fileID: 8749807673612580954, guid: 3a82a985d24586f48a3b1a3efe49b7f5,

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro.Examples;
 using UnityEngine;
+using System;
 
 public class AnimalCombat : MonoBehaviour, IAttacker
 {
@@ -16,8 +17,18 @@ public class AnimalCombat : MonoBehaviour, IAttacker
 
     private BaseAttack _currentAttack;
     private bool _isInitialized = false;
-    private void Start() {
+
+    private bool _isAttacking = false; // variable state
+    public bool IsAttacking { get { return _isAttacking; } } // read only property.
+
+    public event Action OnAttackStart;
+    public event Action OnAttackEnd;
+
+    private UnitMovement _unitMovement;
+
+    private void Awake() {
         _currentAttack = this.GetComponent<BaseAttack>();
+        _unitMovement = GetComponent<UnitMovement>();
     }
 
     private void Update() {
@@ -32,24 +43,47 @@ public class AnimalCombat : MonoBehaviour, IAttacker
 
         _timeSinceLastAttack += Time.deltaTime;
 
-        if(_timeSinceLastAttack >= FireRate) {
-            IDamageable target = SelectTarget(); // add later
+        if (_unitMovement != null && !_unitMovement.IsMoving) {
+            if (_timeSinceLastAttack >= FireRate) {
+                IDamageable target = SelectTarget(); // add later
 
-            if (target != null) {
-                // log self and target
-                Debug.Log($"{this.gameObject.name} is attacking {target}");
-                Attack(target);
-                _timeSinceLastAttack = 0;
-            } else {
-
-                _timeSinceLastAttack = 0; // to prevent infinte logs, remove later
+                if (target != null) {
+                    // log self and target
+                    Debug.Log($"{this.gameObject.name} is attacking {target}");
+                    Attack(target);
+                    _timeSinceLastAttack = 0;
+                } else {
+                    _timeSinceLastAttack = 0; // to prevent infinte logs, remove later
+                }
             }
         }
     }
 
+    private IEnumerator AttackSequence(IDamageable target) {
+
+        yield return new WaitForSeconds(1.5f); // wait time
+
+        _currentAttack.PerformAttack(this.transform, target, AttackPower);
+
+        
+
+        _isAttacking = false; // sets flag as attack has finished.
+        OnAttackEnd?.Invoke();  // send event to subscribers.
+    }
+
     public void Attack(IDamageable target) {
         if (target == null) return;
-        _currentAttack.PerformAttack(this.transform, target, AttackPower);
+        _isAttacking = true; // set state to attack
+        OnAttackStart?.Invoke();  // trigger event that state is now attacking
+
+        if (attackType == AttackType.Projectile) {
+            Debug.Log("Projectile Attack");
+            StartCoroutine(AttackSequence(target));
+        } else {
+            _currentAttack.PerformAttack(this.transform, target, AttackPower);
+            _isAttacking = false; // sets flag as attack has finished.
+            OnAttackEnd?.Invoke();  // send event to subscribers.
+        }
     }
 
     IDamageable SelectTarget() {

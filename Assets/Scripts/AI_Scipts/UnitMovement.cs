@@ -8,8 +8,10 @@ public class UnitMovement : MonoBehaviour
     public LayerMask ground;
     NavMeshAgent agent;
 
+    public bool IsMoving { get { return agent.velocity.magnitude > 1f; } }
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
