@@ -13,6 +13,7 @@ public class ProjectileAttack : BaseAttack {
     }
     public override void PerformAttack(Transform attackerTransform, IDamageable target, float attackPower) {
         if (projectilePrefab == null) return;
+        if (target == null) return;
 
 
         IProjectile projectile = Instantiate(projectilePrefab, attackerTransform.position, Quaternion.identity);

@@ -16,7 +16,7 @@ MonoBehaviour:
   moveSpeed: 2
   rotationSpeed: 8
   attackRange: 6
-  attackPower: 10
+  attackPower: 3
   fireRate: 5
   maxHealth: 42
   attackType: 0

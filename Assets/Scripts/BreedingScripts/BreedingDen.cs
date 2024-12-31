@@ -155,7 +155,9 @@ public class BreedingDen : MonoBehaviour
         for (int i = 0; i < _animalsInDen.Count; i++) {
             AnimalObject animalObject = _animalsInDen[i]; // activate again
             animalObject.gameObject.SetActive(true);
-
+            var stateMachine = animalObject.GetComponent<AnimalStateMachine>();
+            if (stateMachine != null)
+                stateMachine.SetStateToIdle();
         }
 
         _breedingCount++; // increment breeding count

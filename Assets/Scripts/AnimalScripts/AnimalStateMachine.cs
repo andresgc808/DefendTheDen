@@ -98,4 +98,8 @@ public class AnimalStateMachine : MonoBehaviour {
         if (_animator != null)
             _animator.SetBool("isAttacking", false);
     }
+
+    public void SetStateToIdle() {
+        _stateMachine.SetState(_stateMachine.states[0]); // manually set states.
+    }
 }

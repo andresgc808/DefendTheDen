@@ -13,6 +13,12 @@ public class UnitSelectionManager : MonoBehaviour {
     public LayerMask animal;
     public LayerMask ground;
     public GameObject groundMarker;
+    private PauseMenu _pauseMenu;
+
+    void Start() {
+        // get pause menu instance
+        _pauseMenu = FindObjectOfType<PauseMenu>();
+    }
 
     private void Awake() {
         if (Instance != null && Instance != this) {
@@ -23,34 +29,36 @@ public class UnitSelectionManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+        if (!PauseMenu.isPaused) {
+            if (Input.GetMouseButtonDown(0)) {
+                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, animal)) {
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, animal)) {
 
-                if (Input.GetKey(KeyCode.LeftShift)) {
-                    MultiSelect(hit.collider.gameObject);
+                    if (Input.GetKey(KeyCode.LeftShift)) {
+                        MultiSelect(hit.collider.gameObject);
+                    } else {
+                        Debug.Log(hit.collider.gameObject);
+                        SelectObject(hit.collider.gameObject);
+                    }
                 } else {
-                    Debug.Log(hit.collider.gameObject);
-                    SelectObject(hit.collider.gameObject);
+                    // deselect all units
+                    DeselectAll();
                 }
-            } else {
-                // deselect all units
-                DeselectAll();
             }
-        } 
 
-        if (Input.GetMouseButtonDown(1) && selectedUnitsList.Count > 0) {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            if (Input.GetMouseButtonDown(1) && selectedUnitsList.Count > 0) {
+                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground)) {
-                groundMarker.transform.position = hit.point;
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground)) {
+                    groundMarker.transform.position = hit.point;
 
-                // trick to make animation later
-                groundMarker.SetActive(false);
-                groundMarker.SetActive(true);
+                    // trick to make animation later
+                    groundMarker.SetActive(false);
+                    groundMarker.SetActive(true);
+                }
             }
         }
     }
@@ -71,6 +79,7 @@ public class UnitSelectionManager : MonoBehaviour {
 
     private void DeselectAll() {
         foreach (GameObject obj in selectedUnitsList) {
+            if (obj == null) continue;
             EnableUnitMovement(obj, false);
             TriggerSelectionIndicator(obj, false);
         }
