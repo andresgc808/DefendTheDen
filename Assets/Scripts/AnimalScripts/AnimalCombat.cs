@@ -63,6 +63,8 @@ public class AnimalCombat : MonoBehaviour, IAttacker
 
         yield return new WaitForSeconds(1.5f); // wait time
 
+        if (target == null) yield break;
+
         _currentAttack.PerformAttack(this.transform, target, AttackPower);
 
         

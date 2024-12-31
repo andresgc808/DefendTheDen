@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: YetiRig.001|FaceParts.001Action
-      takeName: YetiRig.001|FaceParts.001Action
+      name: YetiRig.001|Walk.001 (1)
+      takeName: YetiRig.001|Walk.001
       internalID: 4401904332636356520
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

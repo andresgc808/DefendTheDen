@@ -51,7 +51,7 @@ public class AnimalStateMachine : MonoBehaviour {
 
         if (_stateMachine.CurrentState == _stateMachine.states[0]) // idle
         {
-            Debug.Log($"{gameObject.name}: Switched to IDLE state");
+            //Debug.Log($"{gameObject.name}: Switched to IDLE state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", false);
                 _animator.SetBool("isAttacking", false);
@@ -59,14 +59,14 @@ public class AnimalStateMachine : MonoBehaviour {
         }
         if (_stateMachine.CurrentState == _stateMachine.states[1])   // moving
         {
-            Debug.Log($"{gameObject.name}: Switched to MOVING state");
+            //Debug.Log($"{gameObject.name}: Switched to MOVING state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", true);
                 _animator.SetBool("isAttacking", false);
             }
         }
         if (_stateMachine.CurrentState == _stateMachine.states[2]) { //attacking
-            Debug.Log($"{gameObject.name}: Switched to ATTACKING state");
+            //Debug.Log($"{gameObject.name}: Switched to ATTACKING state");
             if (_animator != null) {
                 _animator.SetBool("isMoving", false);
                 _animator.SetBool("isAttacking", true);

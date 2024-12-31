@@ -13,4 +13,5 @@ public class Enemy : ScriptableObject {
     public float maxHealth;
     public AttackType attackType;
     public GameObject projectilePrefab; // optional if every enemy has a unique projectile
+    public int cost;
 }
