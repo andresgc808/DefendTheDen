@@ -16,7 +16,6 @@ public class AnimalHealth : MonoBehaviour, IDamageable {
 
     public void Start() {
         MaxHealth = Health;
-        UpdateHealthUI();
 
         if (healthTracker != null) // initally invisible
             healthTracker.gameObject.SetActive(false);
