@@ -114,7 +114,6 @@ public class WaveManager : MonoBehaviour {
         }
 
         _isStartingWave = true;
-
         _currentWaveIndex = (_currentWaveIndex + 1) % waves.Count;
         isWaveActive = true;
         Debug.Log($"Wave Start triggered. Current Wave: {_currentWaveIndex}!");
@@ -124,20 +123,22 @@ public class WaveManager : MonoBehaviour {
 
     private IEnumerator SpawnWave(Wave wave) {
         int remainingCoins = wave.waveCoinBudget;
-        List<EnemySpawnType> availableSpawns = new List<EnemySpawnType>(wave.enemySpawns); // make a copy to work with
+        List<EnemySpawnType> availableSpawns = new List<EnemySpawnType>(wave.enemySpawns);
+
+        // Step 1: Filter out enemies that cannot be afforded.
+        List<EnemySpawnType> affordableSpawns = new List<EnemySpawnType>();
+        foreach (EnemySpawnType spawnType in availableSpawns) {
+
+            if (spawnType.enemyPrefab != null && Resources.Load<Enemy>($"Enemies/{spawnType.enemyPrefab.name}") != null) {
+                    affordableSpawns.Add(spawnType);
+            } else {
+                Debug.LogWarning($"Enemy Prefab: {spawnType.enemyPrefab} is NULL! remove prefab from list!");
+                yield return null;
+            }
+        }
 
         while (remainingCoins > 0 && availableSpawns.Count > 0) {
-            // Step 1: Filter out enemies that cannot be afforded.
-            List<EnemySpawnType> affordableSpawns = new List<EnemySpawnType>();
-            foreach (EnemySpawnType spawnType in availableSpawns) {
-                EnemyStateMachine enemyStateMachine = spawnType.enemyPrefab.GetComponent<EnemyStateMachine>();
-
-                if (enemyStateMachine != null && enemyStateMachine.EnemyData != null && enemyStateMachine.EnemyData.cost <= remainingCoins) {
-                    affordableSpawns.Add(spawnType);
-                } else if (enemyStateMachine == null || enemyStateMachine.EnemyData == null) {
-                    Debug.LogWarning($"Enemy prefab: {spawnType.enemyPrefab.name} does not have EnemyStateMachine or Enemy Data attached!");
-                }
-            }
+            
             // Step 2: If there are no affordable enemies, exit
             if (affordableSpawns.Count == 0) {
                 break;
@@ -145,29 +146,36 @@ public class WaveManager : MonoBehaviour {
             // Step 3: Select a random enemy from affordable spawns
             int randomIndex = Random.Range(0, affordableSpawns.Count);
             EnemySpawnType selectedSpawnType = affordableSpawns[randomIndex];
-            Enemy selectedEnemy = selectedSpawnType.enemyPrefab.GetComponent<EnemyStateMachine>().EnemyData;
+            Enemy enemyData = Resources.Load<Enemy>($"Enemies/{selectedSpawnType.enemyPrefab.name}");
+
+            
+            if (remainingCoins < enemyData.cost) {
+                // continue and remove from list
+                Debug.LogWarning($"Not enough coins to spawn {enemyData.enemyName}, removing from list!");
+                availableSpawns.Remove(selectedSpawnType); // remove from potential spawns list
+                continue;
+            }
 
             // Step 4: Try to spawn the enemy while there are coins remaining.
-            if (TrySpawnEnemy(selectedSpawnType, selectedEnemy, ref remainingCoins)) {
-                Debug.Log($"Spawning enemy: {selectedEnemy.enemyName}");
+            if (TrySpawnEnemy(selectedSpawnType, ref remainingCoins, enemyData)) {
+                Debug.Log($"Spawning enemy: {enemyData.enemyName}");
             } else {
-                Debug.LogWarning($"Failed to spawn any of enemy {selectedEnemy.name}, removing from list!");
+                Debug.LogWarning($"Failed to spawn any of enemy {enemyData.name}, removing from list!");
                 availableSpawns.Remove(selectedSpawnType); // remove from potential spawns list
             }
 
             yield return new WaitForSeconds(0.5f);
         }
-
         _isStartingWave = false;
         isWaveActive = false;
         yield break;
     }
 
-    private bool TrySpawnEnemy(EnemySpawnType spawnType, Enemy enemy, ref int remainingCoins) {
+    private bool TrySpawnEnemy(EnemySpawnType spawnType, ref int remainingCoins, Enemy enemyData) {
         // Step 1: Get preferred spawn locations
         List<SpawnLocationType> preferredLocations = spawnType.preferredSpawnLocations;
         if (preferredLocations == null || preferredLocations.Count == 0) {
-            Debug.LogError($"Enemy {enemy.enemyName} has no preferred spawn locations!");
+            Debug.LogError($"Enemy {spawnType.enemyPrefab.name} has no preferred spawn locations!");
             return false;
         }
         // Step 2: find available locations
@@ -179,43 +187,84 @@ public class WaveManager : MonoBehaviour {
         }
         // step 3: No valid spawn locations
         if (availableLocations.Count == 0) {
-            Debug.LogWarning($"No valid spawn locations for enemy type {enemy.enemyName}!");
+            Debug.LogWarning($"No valid spawn locations for enemy type {spawnType.enemyPrefab.name}!");
             return false;
         }
-
         // Step 4: Randomly select one of the available locations
         int randomLocationIndex = Random.Range(0, availableLocations.Count);
         SpawnLocationType selectedLocationType = availableLocations[randomLocationIndex];
-
         //step 5: Randomly select one of the spawn points within that location type
         List<Transform> possibleSpawnPoints = spawnLocations[selectedLocationType];
         if (possibleSpawnPoints == null || possibleSpawnPoints.Count == 0) {
             Debug.LogError($"No valid spawn points for location {selectedLocationType}!");
             return false;
         }
-
         int randomSpawnIndex = Random.Range(0, possibleSpawnPoints.Count);
         Transform spawnLocation = possibleSpawnPoints[randomSpawnIndex];
+
 
         if (spawnLocation == null) {
             Debug.LogError("Failed to find a valid spawn location from dictionary! (This should never happen)");
             return false;
         }
-        // Step 6: Check if we can afford
-        if (remainingCoins < enemy.cost) {
-            return false;
+
+        // Step 6: Instantiate enemy and deduct coins, using spawn data for configuration.
+        GameObject enemyInstance = GenerateEnemy(spawnType.enemyPrefab, spawnLocation.position, Quaternion.identity, spawnType, enemyData);
+
+
+        if (enemyInstance == null) return false;
+
+        _currentEnemies.Add(enemyInstance); // add for memory management.
+        remainingCoins -= enemyData.cost; // decrement the coins for this object.
+
+        return true;
+    }
+
+    private GameObject GenerateEnemy(GameObject prefab, Vector3 position, Quaternion rotation, EnemySpawnType spawnType, Enemy enemyData) {  // method to get specific game object based on Enemy type data
+
+        GameObject enemyInstance = Instantiate(prefab, position, rotation);  // create enemy
+
+        if (enemyInstance == null) {
+            Debug.LogWarning($"Error Instantiating prefab {prefab.name} from resources!");
+            return null;
         }
 
-        // Step 7: Instantiate enemy and deduct coins
-        GameObject enemyInstance = Instantiate(spawnType.enemyPrefab, spawnLocation.position, Quaternion.identity);
-        var obj = enemyInstance.GetComponent<EnemyStateMachine>();
-        if (obj != null) {
-            obj.SetEnemyData(enemy);
-        } else {
-            Debug.LogWarning($"Enemy Prefab: {enemy.name} doesn't have EnemyStateMachine attached!");
+        EnemyStateMachine obj = enemyInstance.GetComponent<EnemyStateMachine>(); // getting the state machine to pass all data at start.
+
+        if (obj == null) {
+            Debug.LogWarning($"Enemy Prefab: {prefab.name} doesn't have EnemyStateMachine attached!");
+            return null;
         }
-        _currentEnemies.Add(enemyInstance);
-        remainingCoins -= enemy.cost;
-        return true;
+
+        var clone = Instantiate(enemyData);
+
+        obj.EnemyData = DetermineEnemyVariation(clone); // setting the data to the state machine
+
+        return enemyInstance;
+    }
+
+    private Enemy DetermineEnemyVariation(Enemy baseEnemyData) {
+        Enemy clonedEnemyData = Instantiate(baseEnemyData); // creates a new instance rather than setting properties directly, also avoiding shared data
+
+        // Apply variation with controlled randomness, using the already loaded data.
+        clonedEnemyData.moveSpeed = ApplyVariation(baseEnemyData.moveSpeed, 0.15f, 1, 20); // 15% range of original value
+        clonedEnemyData.attackRange = ApplyVariation(baseEnemyData.attackRange, 0.15f, 1, 10);
+        clonedEnemyData.attackPower = ApplyVariation(baseEnemyData.attackPower, 0.15f, 1, 20);
+        clonedEnemyData.fireRate = ApplyVariation(baseEnemyData.fireRate, 0.15f, 0.1f, 10); // fire rate is more sensitive so smaller variation.
+        clonedEnemyData.maxHealth = ApplyVariation(baseEnemyData.maxHealth, 0.15f, 10, 500);
+
+        return clonedEnemyData;
+    }
+
+    private float ApplyVariation(float baseValue, float rangePercentage, float minLimit, float maxLimit) {
+
+        float variation = baseValue * Random.Range(-rangePercentage, rangePercentage); // applies a percentage for a max range
+        float newValue = baseValue + variation;
+        return Mathf.Clamp(newValue, minLimit, maxLimit); // applies limits.
+    }
+
+    public void RemoveEnemy(GameObject enemy) {
+        _currentEnemies.Remove(enemy);
+        Debug.Log($"removed object {enemy.name}. Current count of active enemies is {_currentEnemies.Count}."); // just to make a debug.
     }
 }

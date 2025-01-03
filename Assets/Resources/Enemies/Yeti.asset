@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Yeti
   m_EditorClassIdentifier: 
   enemyName: Yeti
-  moveSpeed: 2
+  moveSpeed: 7
   rotationSpeed: 8
   attackRange: 6
   attackPower: 3

@@ -85,8 +85,11 @@ public class BreedingManager : MonoBehaviour {
         var clone = Instantiate(offspringData);
 
         // Set the data of the new animal made from the prefab to its own custom scriptable object data
-        clone.attackPower = (parent1.attackPower + parent2.attackPower) / 2 + Random.Range(-5, 5);
-        clone.health = (parent1.health + parent2.health) / 2 + Random.Range(-20, 20);
+        // we need to clamp these values to be within a certain range
+
+        clone.attackPower = clone.fireRate = CalculateOffspringStat(parent1.fireRate, parent2.fireRate, 0.2f);
+        clone.health = CalculateOffspringStat(parent1.health, parent2.health, 0.2f);
+        clone.fireRate = CalculateOffspringStat(parent1.fireRate, parent2.fireRate, 0.2f);
 
         obj.AnimalData = clone;
 
@@ -106,6 +109,13 @@ public class BreedingManager : MonoBehaviour {
         //offspring.recessiveRangeTrait = DetermineRecessiveTrait(parent1.recessiveRangeTrait, parent2.recessiveRangeTrait);
 
         return offspring;
+    }
+
+    private float CalculateOffspringStat(float parent1Stat, float parent2Stat, float percentageChange) {
+        // We calculate the offspring stat by taking the average of the two parent's stats and allowing a MAXIMUM percentage change
+        float averageStat = (parent1Stat + parent2Stat) / 2f;
+        float maxChange = averageStat * percentageChange;
+        return Mathf.Clamp(averageStat + Random.Range(-maxChange, maxChange), 0, Mathf.Infinity); // Prevent negative values
     }
 
     //private Trait DetermineDominantTrait(Trait parent1Trait, Trait parent2Trait) {
