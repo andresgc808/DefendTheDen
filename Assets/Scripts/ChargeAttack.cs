@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,13 @@ public class ChargeAttack : BaseAttack
     [SerializeField] private float _rotationSpeed = 5f;
     private Matrix4x4 _matrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
     [SerializeField] private float _windUpTime = 1.5f;
-    private Animator _animator;
+    private Animator? _animator;
 
     private void Start() {
         _animator = GetComponentInChildren<Animator>(); // loading cached animator object
     }
 
-    public override void PerformAttack(Transform attackerTransform, IDamageable target, float attackPower) {
+    public override void PerformAttack(Transform attackerTransform, IDamageable target, float attackPower, Trait? attackTrait) {
         StartCoroutine(PerformCharge(attackerTransform, target, attackPower));
     }
 

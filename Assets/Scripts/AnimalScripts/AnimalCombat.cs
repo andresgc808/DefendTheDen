@@ -24,6 +24,8 @@ public class AnimalCombat : MonoBehaviour, IAttacker
     public event Action OnAttackStart;
     public event Action OnAttackEnd;
 
+    public Trait appliedTrait;
+
     private UnitMovement _unitMovement;
 
     private void Awake() {
@@ -65,9 +67,9 @@ public class AnimalCombat : MonoBehaviour, IAttacker
 
         if (target == null) yield break;
 
-        _currentAttack.PerformAttack(this.transform, target, AttackPower);
+        _currentAttack.PerformAttack(this.transform, target, AttackPower, appliedTrait);
 
-        
+
 
         _isAttacking = false; // sets flag as attack has finished.
         OnAttackEnd?.Invoke();  // send event to subscribers.
@@ -82,7 +84,8 @@ public class AnimalCombat : MonoBehaviour, IAttacker
             Debug.Log("Projectile Attack");
             StartCoroutine(AttackSequence(target));
         } else {
-            _currentAttack.PerformAttack(this.transform, target, AttackPower);
+            // only projectile attacks have traits for now
+            _currentAttack.PerformAttack(this.transform, target, AttackPower, null);
             _isAttacking = false; // sets flag as attack has finished.
             OnAttackEnd?.Invoke();  // send event to subscribers.
         }

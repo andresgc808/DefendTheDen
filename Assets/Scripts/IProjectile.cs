@@ -8,4 +8,6 @@ public interface IProjectile {
     GameObject GetGameObject();
     Transform GetTransform();
     void DestroyProjectile();
+
+    void ApplyTrait(Trait trait);
 }

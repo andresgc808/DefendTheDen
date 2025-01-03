@@ -11,6 +11,7 @@ public class AnimalTower : ScriptableObject {
     public float range;
     public AttackType attackType;
     public GameObject projectilePrefab;
+    public Trait attackTrait;
     //public Trait dominantAttackTrait;
     //public Trait recessiveAttackTrait;
     //public Trait dominantHealthTrait;

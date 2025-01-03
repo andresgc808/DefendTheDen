@@ -128,6 +128,6 @@ public class EnemyCombat : MonoBehaviour, IAttacker {
 
     private void PerformAttack() {
         if (_currentTarget == null) return;
-        _currentAttack.PerformAttack(this.transform, _currentTarget, AttackPower);
+        _currentAttack.PerformAttack(this.transform, _currentTarget, AttackPower, null);
     }
 }

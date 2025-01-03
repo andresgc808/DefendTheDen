@@ -62,6 +62,10 @@ public class AnimalObject : MonoBehaviour
                 if (_navMeshAgent != null) _navMeshAgent.enabled = true;
                 //if (_unitMovement != null) _unitMovement.enabled = true;
             }
+
+            // add trait effects
+            combat.appliedTrait = AnimalData.attackTrait;
+
         }
     }
 
