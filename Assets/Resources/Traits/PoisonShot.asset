@@ -20,5 +20,6 @@ MonoBehaviour:
   speedModifier: 0
   attackPowerModifier: 0
   rangeModifier: 0
-  particlePrefab: {fileID: 0}
+  particlePrefab: {fileID: 5541210317941491181, guid: 301d4b3677051a3499e6804e7ad4ce55,
+    type: 3}
   effectDuration: 3
