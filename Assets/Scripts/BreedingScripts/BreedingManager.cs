@@ -11,9 +11,9 @@ public class BreedingManager : MonoBehaviour {
     private void _PopulateBreedingPairDatabase() { 
         _breedingPairs = new Dictionary<(string, string), List<string>> {
             // keep dictionary symmetrical *might not be needed
-               { ("Rhino", "Squirrel"), new List<string> { "Rhino", "Squirrel" } },
-               { ("Squirrel", "Rhino"), new List<string> { "Rhino", "Squirrel" } },
-                };
+            { ("Rhino", "Squirrel"), new List<string> { "Rhino", "Squirrel" } },
+            { ("Squirrel", "Rhino"), new List<string> { "Rhino", "Squirrel" } },
+            };
     }
 
     public GameObject BreedAnimals(AnimalTower parent1, AnimalTower parent2) {

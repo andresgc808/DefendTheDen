@@ -45,22 +45,18 @@ public class AnimalObject : MonoBehaviour
             //if (AnimalData.attackTrait != null)
             //    AnimalData.attackTrait.ApplyTraitEffect(combat);
 
-            Debug.Log($"AnimalObject: {gameObject.name} has been initialized with {AnimalData.speciesName} data.");
             Debug.Log($"AnimalObject: {gameObject.name} has {health.Health} health, {combat.AttackPower} attack power, {combat.FireRate} fire rate, and {combat.AttackRange} attack range.");
             var attackComponent = this.gameObject.AddComponent(System.Type.GetType(AnimalData.attackType.ToString() + "Attack")) as BaseAttack;
 
             if (attackComponent is ProjectileAttack projectileAttack && AnimalData.attackType == AttackType.Projectile) {
                 projectileAttack.LoadProjectilePrefab($"{AnimalData.speciesName}Projectile");
             }
-            //if (attackComponent != null)
-            //    attackComponent.Range = AnimalData.range;
 
             if(_moveableObject != null){
                 if (_navMeshAgent != null) _navMeshAgent.enabled = false;
                 if (_unitMovement != null) _unitMovement.enabled = false;
             }else {
                 if (_navMeshAgent != null) _navMeshAgent.enabled = true;
-                //if (_unitMovement != null) _unitMovement.enabled = true;
             }
 
             // add trait effects
@@ -96,28 +92,4 @@ public class AnimalObject : MonoBehaviour
         if (combat) combat.enabled = false;
         if (health) health.enabled = false;
     }
-
-    // Deprecated
-    public void Activate() {
-        // Enable rendering
-        foreach (var renderer in _renderers) {
-            renderer.enabled = true;
-        }
-
-        // Enable collider
-        if (_collider) _collider.enabled = true;
-
-        // Re-enable rigidbody physics
-        if (_rigidbody) _rigidbody.isKinematic = false;
-
-        // Re-enable movement script
-        if (_moveableObject) _moveableObject.enabled = true;
-        //if (_unitMovement != null) _unitMovement.enabled = true;
-        if (_navMeshAgent != null) _navMeshAgent.enabled = true;
-
-        // Re-enable combat and health scripts
-        if (combat) combat.enabled = true;
-        if (health) health.enabled = true;
-    }
-
 }

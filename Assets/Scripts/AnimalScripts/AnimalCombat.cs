@@ -47,7 +47,7 @@ public class AnimalCombat : MonoBehaviour, IAttacker
 
         if (_unitMovement != null && !_unitMovement.IsMoving) {
             if (_timeSinceLastAttack >= FireRate) {
-                IDamageable target = SelectTarget(); // add later
+                IDamageable target = SelectTarget();
 
                 if (target != null) {
                     // log self and target

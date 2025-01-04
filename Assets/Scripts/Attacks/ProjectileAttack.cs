@@ -16,9 +16,7 @@ public class ProjectileAttack : BaseAttack {
         if (projectilePrefab == null) return;
         if (target == null) return;
 
-
         IProjectile projectile = Instantiate(projectilePrefab, attackerTransform.position, Quaternion.identity);
-        Debug.Log($"Projectile Instantiated at: {projectile.GetTransform().position}");
 
         if (attackTrait != null)
             projectile.ApplyTrait(attackTrait);
