@@ -21,6 +21,8 @@ public class ProjectileAttack : BaseAttack {
         if (attackTrait != null)
             projectile.ApplyTrait(attackTrait);
 
+        if (target == null) return;
+
         projectile.LaunchProjectile(attackerTransform.position, ((MonoBehaviour)target).transform.position, attackPower); // launch projectile using interface method
     }
 }

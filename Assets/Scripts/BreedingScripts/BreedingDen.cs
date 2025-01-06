@@ -4,8 +4,13 @@ using UnityEngine;
 using System;
 using TMPro;
 
-public class BreedingDen : MonoBehaviour
-{
+[System.Serializable]
+public struct WaveBreedingData {
+    public int waveIndex;
+    public int maxBreedingAttempts;
+}
+
+public class BreedingDen : MonoBehaviour {
     [SerializeField] private int breedingTimeInSeconds = 5;
 
     [SerializeField] private BreedingManager _breedingManager;
@@ -14,8 +19,9 @@ public class BreedingDen : MonoBehaviour
 
     private int _breedingCount = 0; // Current breeding count
 
-    [SerializeField] private int maxBreedingAttempts = 2;
-
+    // [SerializeField] private int maxBreedingAttempts = 2; moved this to Wave SO
+    [SerializeField] private List<WaveBreedingData> _maxBreedingAttemptsPerWave = new List<WaveBreedingData>();
+    public int maxBreedingAttempts { get; private set; }
     private int animalsNeededToBreed = 2;
 
     private bool _isBreeding = false;
@@ -42,8 +48,10 @@ public class BreedingDen : MonoBehaviour
     private int _waveCountdown = 15;
 
     public TextMeshProUGUI waveStartTimerText;
+    [SerializeField] private TextMeshProUGUI _breedingAttemptsLeftText;
 
     private bool _timerEnabled = false;
+    private int _currentWaveIndex = 0;
 
     void Start() {
 
@@ -51,19 +59,59 @@ public class BreedingDen : MonoBehaviour
         _waveManager = FindObjectOfType<WaveManager>();
 
         if (_waveManager != null) {
-            _waveManager.OnWaveStart += TimerFinished;
+            _waveManager.OnWaveEnd += WaveEnd;
+            _waveManager.OnWaveStart += WaveStart;
         }
 
         if (waveStartTimerText != null) {
             waveStartTimerText.gameObject.SetActive(false);
         }
+
+        // initialize maxBreedingAttempts for the first wave
+        WaveBreedingData? waveBreedingData = _maxBreedingAttemptsPerWave.Find(x => x.waveIndex == _waveManager.currentWaveIndex);
+        if (waveBreedingData.HasValue)
+            maxBreedingAttempts = waveBreedingData.Value.maxBreedingAttempts;
+        UpdateBreedingTracker();
+    }
+
+    private void WaveStart() {
+        _breedingAttemptsLeftText.gameObject.SetActive(false);
+    }
+
+    private void WaveEnd() {
+        if (_waveManager.waves == null || _waveManager.waves.Count == 0) return;
+
+        _currentWaveIndex = _waveManager.currentWaveIndex;
+        // try find value in dictionary first.
+
+        WaveBreedingData? waveBreedingData = _maxBreedingAttemptsPerWave.Find(x => x.waveIndex == _currentWaveIndex);
+
+        if (waveBreedingData.HasValue) {
+            maxBreedingAttempts = waveBreedingData.Value.maxBreedingAttempts;
+        } else {
+            maxBreedingAttempts = 2; // default value
+            Debug.LogWarning("No wave breeding data found for current wave, setting default breeding attempts.");
+        }
+        _breedingCount = 0; // reset when wave is called
+
+        if (_breedingAttemptsLeftText == null) {
+            Debug.Log("_breedingAttemptsLeftText is null");
+            return;
+        }
+        UpdateBreedingTracker();
+    }
+
+    public void UpdateBreedingTracker() {
+        _breedingAttemptsLeftText.gameObject.SetActive(true);
+        _breedingAttemptsLeftText.text = $"Breeding Chances: {maxBreedingAttempts - _breedingCount}";
     }
 
     private void OnTriggerEnter(Collider other) {
-        
+
         if (_waveManager.isWaveActive) return; // break instantly to prevent breeding during wave
 
-        Debug.Log("Object with name: " + other.gameObject.name +" entered. isBreeding = " + _isBreeding + ". On Cooldown = "+ _isOnCooldown + ". Breeding attempt: " + _breedingCount);
+        Debug.Log("Object with name: " + other.gameObject.name + " entered. isBreeding = " + _isBreeding);
+        Debug.Log(". On Cooldown = " + _isOnCooldown + ". Breeding attempt: " + _breedingCount + ". Max breeds = " + maxBreedingAttempts + " for wave: " + _currentWaveIndex);
 
         if (_isBreeding || _isOnCooldown || _breedingCount >= maxBreedingAttempts) return;
 
@@ -85,8 +133,8 @@ public class BreedingDen : MonoBehaviour
 
         OnAnimalArrived?.Invoke();
 
-        if (CountAnimalsInsideDen == animalsNeededToBreed) { 
-            BeginBreeding(); 
+        if (CountAnimalsInsideDen == animalsNeededToBreed) {
+            BeginBreeding();
         }
     }
 
@@ -111,7 +159,7 @@ public class BreedingDen : MonoBehaviour
         // yield allows us to return control to Unity for the amount of seconds specified
         // when the time has passed, Unity will resume the coroutine at TimerExpiredEvent
         yield return new WaitForSecondsRealtime(breedingTimeInSeconds); TimerExpiredEvent();
-        
+
         _isOnCooldown = true;
 
         StartCoroutine(CooldownSequence());
@@ -168,11 +216,14 @@ public class BreedingDen : MonoBehaviour
         // If there are, invoke the event to notify all subscribers that the breeding process has ended
         OnBreedingEnd?.Invoke();  // triggers new callbacks events
 
+        UpdateBreedingTracker();
+
         if (_breedingCount >= maxBreedingAttempts && !_timerEnabled) {
             // start wave countdown after all breeding has been done
             _timerEnabled = true;
             StartCoroutine(StartWaveTimer());
             waveStartTimerText?.gameObject.SetActive(true); // shows counter after max breeding has been reached
+            _breedingAttemptsLeftText.gameObject.SetActive(false);
         }
     }
 

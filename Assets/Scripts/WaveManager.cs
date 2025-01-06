@@ -21,13 +21,17 @@ public class WaveManager : MonoBehaviour {
     public Slider slider;
     public TextMeshProUGUI timerText;
     public event Action OnWaveStart;
+    public event Action OnWaveEnd;
     public bool CanStartWave { get { return _holdTimer >= holdDuration; } }
 
     public List<Wave> waves; // list of scriptable objects
     private int _currentWaveIndex = 0;
+    public int currentWaveIndex { get { return _currentWaveIndex; } private set { _currentWaveIndex = value; } }
     private List<GameObject> _currentEnemies = new List<GameObject>();
     public bool isWaveActive { get; private set; } = false;
     private bool _isStartingWave = false;
+
+    [SerializeField] private TextMeshProUGUI _waveCounterText;
 
     public static WaveManager Instance { get; private set; }
 
@@ -48,6 +52,8 @@ public class WaveManager : MonoBehaviour {
             Destroy(gameObject);
         }
         InitializeSpawnLocations();
+        _waveCounterText.gameObject.SetActive(true);
+        UpdateWaveCounterUI();
     }
     private void InitializeSpawnLocations() {
         spawnLocations = new Dictionary<SpawnLocationType, List<Transform>>();
@@ -78,7 +84,22 @@ public class WaveManager : MonoBehaviour {
             _holdTimer = 0f;
             _isHolding = false;
         }
+
+        if (isWaveActive && _currentEnemies.Count == 0) {
+            isWaveActive = false;
+            UpdateWaveCounterUI();
+            OnWaveEnd?.Invoke();
+        }
+
         UpdateUI();
+    }
+
+    private void UpdateWaveCounterUI() {
+        if (_waveCounterText == null) {
+            Debug.Log("wave counter is null");
+            return;
+        }
+        _waveCounterText.text = $"Wave: {_currentWaveIndex + 1}";
     }
 
     private void UpdateUI() {
@@ -114,10 +135,11 @@ public class WaveManager : MonoBehaviour {
         }
 
         _isStartingWave = true;
-        _currentWaveIndex = (_currentWaveIndex + 1) % waves.Count;
+        
         isWaveActive = true;
-        Debug.Log($"Wave Start triggered. Current Wave: {_currentWaveIndex}!");
+        Debug.Log($"Wave Start triggered. Current Wave: {_currentWaveIndex + 1}!");
         StartCoroutine(SpawnWave(waves[_currentWaveIndex]));
+        _currentWaveIndex = (_currentWaveIndex + 1) % waves.Count;
         OnWaveStart?.Invoke();
     }
 
@@ -167,7 +189,6 @@ public class WaveManager : MonoBehaviour {
             yield return new WaitForSeconds(0.5f);
         }
         _isStartingWave = false;
-        isWaveActive = false;
         yield break;
     }
 
@@ -239,6 +260,10 @@ public class WaveManager : MonoBehaviour {
         var clone = Instantiate(enemyData);
 
         obj.EnemyData = DetermineEnemyVariation(clone); // setting the data to the state machine
+
+        EnemyHealth health = enemyInstance.GetComponent<EnemyHealth>();
+        if (health != null)
+            health.OnDeath += () => RemoveEnemy(enemyInstance);
 
         return enemyInstance;
     }
