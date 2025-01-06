@@ -60,11 +60,15 @@ public class StraightProjectile : BaseProjectile {
     }
 
     private IEnumerator ApplyPoison(IDamageable target, float duration, float damagePerSecond) {
-        float timeElapsed = 0;
+        float timeElapsed = 0f;
+        float tickRate = 1f; // Damage every 1 second
+
         while (timeElapsed <= duration) {
-            target.TakeDamage(damagePerSecond * Time.deltaTime);
-            timeElapsed += Time.deltaTime;
-            yield return null;
+            if (target == null || !target.IsAlive) yield break;
+
+            target.TakeDamage(damagePerSecond);
+            timeElapsed += tickRate;
+            yield return new WaitForSeconds(tickRate);
         }
     }
 }

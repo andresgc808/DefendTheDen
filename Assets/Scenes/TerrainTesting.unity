@@ -2252,14 +2252,15 @@ MonoBehaviour:
   - waveIndex: 0
     maxBreedingAttempts: 2
   - waveIndex: 1
-    maxBreedingAttempts: 2
+    maxBreedingAttempts: 4
   - waveIndex: 2
-    maxBreedingAttempts: 2
+    maxBreedingAttempts: 6
   spawnPoints:
   - {fileID: 2002451493}
   - {fileID: 1978942757}
   - {fileID: 135743298}
   waveStartTimerText: {fileID: 1379558215}
+  _breedingAttemptsLeftText: {fileID: 2029521052}
 --- !u!136 &962498470
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5891,12 +5892,12 @@ GameObject:
   - component: {fileID: 2029521053}
   - component: {fileID: 2029521052}
   m_Layer: 0
-  m_Name: MaxBreedingAttempts
+  m_Name: BreedingAttemptsLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2029521051
 RectTransform:
   m_ObjectHideFlags: 0

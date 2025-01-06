@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   traitName: 
   traitType: 0
-  duration: 3
-  damagePerSecond: 5
+  duration: 8
+  damagePerSecond: 2
   armorModifier: 0
   speedModifier: 0
   attackPowerModifier: 0
