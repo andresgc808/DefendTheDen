@@ -17,6 +17,6 @@ MonoBehaviour:
   health: 0
   fireRate: 0
   range: 0
-  attackType: 0
+  attackType: 1
   projectilePrefab: {fileID: 0}
   attackTrait: {fileID: 0}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd29f89e576f82d4cb747f41cb79bc71, type: 3}
+  m_Name: Hedgehog
+  m_EditorClassIdentifier: 
+  speciesName: Hedgehog
+  attackPower: 5
+  health: 14
+  fireRate: 8
+  range: 13
+  attackType: 0
+  projectilePrefab: {fileID: 8749807673612580954, guid: 3a82a985d24586f48a3b1a3efe49b7f5,
+    type: 3}
+  attackTrait: {fileID: 11400000, guid: b302c2d0af253234aadfbb14939647be, type: 2}
