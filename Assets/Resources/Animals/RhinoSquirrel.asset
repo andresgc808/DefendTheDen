@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd29f89e576f82d4cb747f41cb79bc71, type: 3}
-  m_Name: SquirrelTwo
+  m_Name: RhinoSquirrel
   m_EditorClassIdentifier: 
-  speciesName: Squirrel
+  speciesName: 
   attackPower: 6
-  health: 12
-  fireRate: 6
-  range: 8
+  health: 20
+  fireRate: 5
+  range: 15
   attackType: 0
   projectilePrefab: {fileID: 919132149155446097, guid: c23501524f8acbd4494e665293949994,
     type: 3}

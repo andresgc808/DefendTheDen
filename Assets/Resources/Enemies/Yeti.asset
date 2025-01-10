@@ -18,7 +18,7 @@ MonoBehaviour:
   attackRange: 6
   attackPower: 3
   fireRate: 5
-  maxHealth: 1
+  maxHealth: 25
   attackType: 0
   projectilePrefab: {fileID: 8749807673612580954, guid: c30c48b14a3e83f4c8e305821aa8f6ee,
     type: 3}

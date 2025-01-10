@@ -16,4 +16,4 @@ MonoBehaviour:
   enemySpawns:
   - enemyPrefab: {fileID: 5565899459631558538, guid: e8ec565c25d965543873126bd63fb125,
       type: 3}
-    preferredSpawnLocations: 0000000001000000
+    preferredSpawnLocations: 0100000001000000

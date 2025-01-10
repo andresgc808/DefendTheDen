@@ -31,7 +31,7 @@ public class EnemyCombat : MonoBehaviour, IAttacker {
         var attackComponent = this.gameObject.AddComponent(System.Type.GetType(_enemyData.attackType.ToString() + "Attack")) as BaseAttack;
         if (attackComponent is ProjectileAttack projectileAttack && _enemyData.attackType == AttackType.Projectile) {
             // we will not load a projectile this way but it can be done.
-             projectileAttack.LoadProjectilePrefab($"{_enemyData.enemyName}Projectile");
+            projectileAttack.projectilePrefab = _enemyData.projectilePrefab?.GetComponent<BaseProjectile>();
         }
         _currentAttack = attackComponent;
     }

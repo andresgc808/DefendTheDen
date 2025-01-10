@@ -49,7 +49,7 @@ public class AnimalObject : MonoBehaviour
             var attackComponent = this.gameObject.AddComponent(System.Type.GetType(AnimalData.attackType.ToString() + "Attack")) as BaseAttack;
 
             if (attackComponent is ProjectileAttack projectileAttack && AnimalData.attackType == AttackType.Projectile) {
-                projectileAttack.LoadProjectilePrefab($"{AnimalData.speciesName}Projectile");
+                projectileAttack.projectilePrefab = AnimalData.projectilePrefab?.GetComponent<BaseProjectile>();
             }
 
             if(_moveableObject != null){

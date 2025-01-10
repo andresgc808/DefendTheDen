@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd29f89e576f82d4cb747f41cb79bc71, type: 3}
-  m_Name: EnemySquirrel
+  m_Name: HedgehogSquirrel
   m_EditorClassIdentifier: 
-  speciesName: Squirrel
-  attackPower: 0
-  health: 30
-  fireRate: 100
-  range: 0
+  speciesName: HedgehogSquirrel
+  attackPower: 7
+  health: 5
+  fireRate: 5
+  range: 15
   attackType: 0
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 919132149155446097, guid: 0ce33ffc5ff27444687a70fd104b6c41,
+    type: 3}
+  attackTrait: {fileID: 0}

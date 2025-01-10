@@ -6,12 +6,13 @@ using UnityEngine;
 public class ProjectileAttack : BaseAttack {
     public BaseProjectile? projectilePrefab;
 
-    public void LoadProjectilePrefab(string projectileName) {
-        projectilePrefab = Resources.Load<BaseProjectile>($"Prefabs/{projectileName}"); // load projectile from resources by string.
-        if (projectilePrefab == null) {
-            Debug.LogError("Projectile prefab failed to load!");
-        }
-    }
+    //public void LoadProjectilePrefab(string projectileName) {
+    //    projectilePrefab = Resources.Load<BaseProjectile>($"Prefabs/{projectileName}"); // load projectile from resources by string.
+    //    if (projectilePrefab == null) {
+    //        Debug.LogError("Projectile prefab failed to load!");
+    //    }
+    //}
+
     public override void PerformAttack(Transform attackerTransform, IDamageable target, float attackPower, Trait? attackTrait) {
         if (projectilePrefab == null) return;
         if (target == null) return;
