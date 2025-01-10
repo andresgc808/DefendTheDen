@@ -11,8 +11,26 @@ public class BreedingManager : MonoBehaviour {
     private void _PopulateBreedingPairDatabase() { 
         _breedingPairs = new Dictionary<(string, string), List<string>> {
             // keep dictionary symmetrical *might not be needed
-            { ("Rhino", "Squirrel"), new List<string> { "Rhino", "Squirrel" } },
-            { ("Squirrel", "Rhino"), new List<string> { "Rhino", "Squirrel" } },
+            { ("Rhino", "Squirrel"), new List<string> { "Rhino", "Squirrel", "RhinoSquirrel" } },
+            { ("Squirrel", "Rhino"), new List<string> { "Rhino", "Squirrel", "RhinoSquirrel" } },
+
+            { ("Hedgehog", "Squirrel"), new List<string> { "Hedgehog", "Squirrel", "HedgeSquirrel" } },
+            { ("Squirrel", "Hedgehog"), new List<string> { "Hedgehog", "Squirrel", "HedgeSquirrel" } },
+
+            { ("HedgeSquirrel", "Squirrel"), new List<string> { "Squirrel", "HedgeSquirrel" } },
+            { ("Squirrel", "HedgeSquirrel"), new List<string> { "Squirrel", "HedgeSquirrel" } },
+
+            { ("RhinoSquirrel", "Squirrel"), new List<string> { "Squirrel", "RhinoSquirrel" } },
+            { ("Squirrel", "RhinoSquirrel"), new List<string> { "Squirrel", "RhinoSquirrel" } },
+
+            { ("RhinoSquirrel", "HedgeSquirrel"), new List<string> { "HedgeSquirrel", "RhinoSquirrel" } },
+            { ("HedgeSquirrel", "RhinoSquirrel"), new List<string> { "HedgeSquirrel", "RhinoSquirrel" } },
+
+            { ("Rhino", "RhinoSquirrel"), new List<string> { "Rhino", "RhinoSquirrel" } },
+            { ("RhinoSquirrel", "Rhino"), new List<string> { "Rhino", "RhinoSquirrel" } },
+
+            { ("Hedgehog", "HedgeSquirrel"), new List<string> { "HedgeSquirrel", "Hedgehog" } },
+            { ("HedgeSquirrel", "Hedgehog"), new List<string> { "HedgeSquirrel", "Hedgehog" } },
             };
     }
 

@@ -64,7 +64,8 @@ public class StraightProjectile : BaseProjectile {
         float tickRate = 1f; // Damage every 1 second
 
         while (timeElapsed <= duration) {
-            if (target == null || !target.IsAlive) yield break;
+            if (target == null) yield break;
+            if (!target.IsAlive) yield break;
 
             target.TakeDamage(damagePerSecond);
             timeElapsed += tickRate;

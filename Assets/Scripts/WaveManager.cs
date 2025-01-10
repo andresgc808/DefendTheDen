@@ -72,7 +72,7 @@ public class WaveManager : MonoBehaviour {
 
             _holdTimer += Time.deltaTime;
 
-            if (CanStartWave) {
+            if (CanStartWave && !isWaveActive) {
                 _holdTimer = 0f;
                 StartWave();
                 _isHolding = false;
